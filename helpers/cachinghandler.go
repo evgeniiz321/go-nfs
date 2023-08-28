@@ -3,6 +3,7 @@ package helpers
 import (
 	"crypto/sha256"
 	"encoding/binary"
+	"fmt"
 	"io/fs"
 
 	"github.com/willscott/go-nfs"
@@ -80,12 +81,54 @@ func (c *CachingHandler) FromHandle(fh []byte) (billy.Filesystem, []string, erro
 	return nil, []string{}, &nfs.NFSStatusError{NFSStatus: nfs.NFSStatusStale}
 }
 
+func (c *CachingHandler) UpdateFileHandle(dirFileHandle []byte, oldFileName string, newFileName string) error {
+	id, err := uuid.FromBytes(dirFileHandle)
+	if err != nil {
+		return err
+	}
+
+	if dir, ok := c.activeHandles.Get(id); ok {
+		for _, k := range c.activeHandles.Keys() {
+			candidate, _ := c.activeHandles.Peek(k)
+			if hasPrefix(dir.p, candidate.p) && len(candidate.p) > 0 && candidate.p[len(candidate.p)-1] == oldFileName {
+				candidate.p = append(make([]string, 0, len(dir.p)+1), dir.p...)
+				candidate.p = append(candidate.p, newFileName)
+				c.activeHandles.Add(k, entry{candidate.f, candidate.p})
+			}
+		}
+	}
+	return nil
+}
+
+func (c *CachingHandler) UpdateHandle(fh []byte, s billy.Filesystem, path []string) error {
+	id, err := uuid.FromBytes(fh)
+	if err != nil {
+		return err
+	}
+	if f, ok := c.activeHandles.Get(id); ok {
+		f.p = path
+		f.f = s
+	}
+	return nil
+}
+
+func (c *CachingHandler) PrintHandles() error {
+	for _, k := range c.activeHandles.Keys() {
+		candidate, _ := c.activeHandles.Peek(k)
+		fmt.Printf("id: %s; key: %s\n", k, candidate.p)
+	}
+	return nil
+}
+
 // HandleLimit exports how many file handles can be safely stored by this cache.
 func (c *CachingHandler) HandleLimit() int {
 	return c.cacheLimit
 }
 
 func hasPrefix(path, prefix []string) bool {
+	if len(path) == 0 {
+		return true
+	}
 	if len(prefix) > len(path) {
 		return false
 	}

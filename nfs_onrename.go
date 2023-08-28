@@ -80,6 +80,10 @@ func onRename(ctx context.Context, w *response, userHandle Handler) error {
 		}
 		return &NFSStatusError{NFSStatusIO, err}
 	}
+	err = userHandle.UpdateFileHandle(to.Handle, string(from.Filename), string(to.Filename))
+	if err != nil {
+		return &NFSStatusError{NFSStatusServerFault, err}
+	}
 
 	writer := bytes.NewBuffer([]byte{})
 	if err := xdr.Write(writer, uint32(NFSStatusOk)); err != nil {

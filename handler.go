@@ -26,8 +26,11 @@ type Handler interface {
 	// Can be safely implemented via helpers/cachinghandler.
 	ToHandle(fs billy.Filesystem, path []string) []byte
 	FromHandle(fh []byte) (billy.Filesystem, []string, error)
+	UpdateHandle(fh []byte, s billy.Filesystem, path []string) error
+	UpdateFileHandle(dirFileHandle []byte, oldFileName string, newFileName string) error
 	// How many handles can be safely maintained by the handler.
 	HandleLimit() int
+	PrintHandles() error
 }
 
 // CachingHandler represents the optional caching work that a user may wish to over-ride with

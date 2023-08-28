@@ -53,3 +53,15 @@ func (h *NullAuthHandler) FromHandle([]byte) (billy.Filesystem, []string, error)
 func (h *NullAuthHandler) HandleLimit() int {
 	return -1
 }
+
+func (h *NullAuthHandler) UpdateHandle(fh []byte, s billy.Filesystem, path []string) error {
+	return nil
+}
+
+func (h *NullAuthHandler) PrintHandles() error {
+	return nil
+}
+
+func (h *NullAuthHandler) UpdateFileHandle(dirFileHandle []byte, oldFileName string, newFileName string) error {
+	return nil
+}

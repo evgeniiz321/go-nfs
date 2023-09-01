@@ -5,7 +5,7 @@ import (
 	"net"
 	"os"
 
-	"github.com/willscott/memphis"
+	"github.com/evgeniiz321/memphis"
 
 	nfs "github.com/willscott/go-nfs"
 	nfshelper "github.com/willscott/go-nfs/helpers"

@@ -84,7 +84,12 @@ func onRename(ctx context.Context, w *response, userHandle Handler) error {
 	if err != nil {
 		return &NFSStatusError{NFSStatusServerFault, err}
 	}
-
+	if vh, ok := userHandle.(CachingHandler); ok {
+		err = vh.InvalidateVerifier(fs.Join(fromPath...))
+		if err != nil {
+			return &NFSStatusError{NFSStatusServerFault, err}
+		}
+	}
 	writer := bytes.NewBuffer([]byte{})
 	if err := xdr.Write(writer, uint32(NFSStatusOk)); err != nil {
 		return &NFSStatusError{NFSStatusServerFault, err}

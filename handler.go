@@ -40,4 +40,5 @@ type CachingHandler interface {
 
 	// fs.FileInfo needs to be sorted by Name(), nil in case of a cache-miss
 	DataForVerifier(path string, verifier uint64) []fs.FileInfo
+	InvalidateVerifier(path string) error
 }

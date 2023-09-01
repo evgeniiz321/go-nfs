@@ -1,4 +1,6 @@
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
+github.com/evgeniiz321/memphis v0.0.0-20230901185310-22c8f4c1bc40 h1:EdI7QB7WuBbIXfjJqjU+zj2OtSzdaV/HMAelLHFLZ68=
+github.com/evgeniiz321/memphis v0.0.0-20230901185310-22c8f4c1bc40/go.mod h1:ZfVpoI6dKjbEf7ghPshC+n41FaEtDM7bhZyioVjOwOc=
 github.com/go-git/go-billy/v5 v5.0.0/go.mod h1:pmpqyWchKfYfrkb/UVH4otLvyi/5gJlGI4Hb3ZqZ3W0=
 github.com/go-git/go-billy/v5 v5.4.1 h1:Uwp5tDRkPr+l/TnbHOQzp+tmJfLceOlbVucgpTz8ix4=
 github.com/go-git/go-billy/v5 v5.4.1/go.mod h1:vjbugF6Fz7JIflbVpl1hJsGjSHNltrSw45YK/ukIvQg=

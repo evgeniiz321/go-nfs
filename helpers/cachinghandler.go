@@ -90,7 +90,7 @@ func (c *CachingHandler) UpdateFileHandle(dirFileHandle []byte, oldFileName stri
 	if dir, ok := c.activeHandles.Get(id); ok {
 		for _, k := range c.activeHandles.Keys() {
 			candidate, _ := c.activeHandles.Peek(k)
-			if hasPrefix(dir.p, candidate.p) && len(candidate.p) > 0 && candidate.p[len(candidate.p)-1] == oldFileName {
+			if hasPrefix(candidate.p, dir.p) && len(candidate.p) > 0 && candidate.p[len(candidate.p)-1] == oldFileName {
 				candidate.p = append(make([]string, 0, len(dir.p)+1), dir.p...)
 				candidate.p = append(candidate.p, newFileName)
 				c.activeHandles.Add(k, entry{candidate.f, candidate.p})
@@ -116,6 +116,10 @@ func (c *CachingHandler) PrintHandles() error {
 	for _, k := range c.activeHandles.Keys() {
 		candidate, _ := c.activeHandles.Peek(k)
 		fmt.Printf("id: %s; key: %s\n", k, candidate.p)
+	}
+	for _, k := range c.activeVerifiers.Keys() {
+		candidate, _ := c.activeVerifiers.Peek(k)
+		fmt.Printf("id: %d; path: %s; contents: %s\n", k, candidate.path, candidate.contents)
 	}
 	return nil
 }
@@ -170,6 +174,16 @@ func (c *CachingHandler) VerifierFor(path string, contents []fs.FileInfo) uint64
 func (c *CachingHandler) DataForVerifier(path string, id uint64) []fs.FileInfo {
 	if cache, ok := c.activeVerifiers.Get(id); ok {
 		return cache.contents
+	}
+	return nil
+}
+
+func (c *CachingHandler) InvalidateVerifier(path string) error {
+	for _, k := range c.activeVerifiers.Keys() {
+		candidate, _ := c.activeVerifiers.Peek(k)
+		if candidate.path == path {
+			c.activeVerifiers.Remove(k)
+		}
 	}
 	return nil
 }

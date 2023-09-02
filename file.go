@@ -207,7 +207,7 @@ func (s *SetFileAttributes) Apply(changer billy.Change, fs billy.Filesystem, fil
 	curr := ToFileAttribute(curOS)
 
 	if s.SetMode != nil {
-		mode := os.FileMode(*s.SetMode) & os.ModePerm
+		mode := os.FileMode(*s.SetMode)
 		if mode != curr.Mode().Perm() {
 			if changer == nil {
 				return &NFSStatusError{NFSStatusNotSupp, os.ErrPermission}

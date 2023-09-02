@@ -11,7 +11,7 @@ require (
 )
 
 require (
-	github.com/evgeniiz321/memphis v0.0.0-20230901185310-22c8f4c1bc40 // indirect
+	github.com/evgeniiz321/memphis v0.0.0-20230902001321-9015a5e95f1a // indirect
 	github.com/polydawn/go-timeless-api v0.0.0-20220821201550-b93919e12c56 // indirect
 	github.com/polydawn/refmt v0.0.0-20201211092308-30ac6d18308e // indirect
 	github.com/polydawn/rio v0.0.0-20220823181337-7c31ad9831a4 // indirect

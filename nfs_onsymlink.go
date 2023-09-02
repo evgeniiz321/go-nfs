@@ -20,6 +20,8 @@ func onSymlink(ctx context.Context, w *response, userHandle Handler) error {
 	if err != nil {
 		return &NFSStatusError{NFSStatusInval, err}
 	}
+	symlink_attrs := *attrs.SetMode | uint32(os.ModeSymlink)
+	attrs.SetMode = &symlink_attrs
 
 	target, err := xdr.ReadOpaque(w.req.Body)
 	if err != nil {
